@@ -23,7 +23,7 @@ Installation: Flash exfatprogs.zip through Magisk/KSU
 
 Credits:
  - [exfatprogs](https://github.com/exfatprogs/exfatprogs)
- - [e2fsprogs/libblkid](https://github.com/exfatprogs/exfatprogs)
+ - [e2fsprogs/libblkid](https://android.googlesource.com/platform/external/e2fsprogs)
  - [Android NDK](https://developer.android.com/ndk/)
  - [Magisk](https://github.com/topjohnwu/Magisk)
  - [KernelSU](https://kernelsu.org/)
