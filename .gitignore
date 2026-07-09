@@ -1,0 +1,5 @@
+/libs/
+/obj/
+/module.prop
+/sepolicy.rule
+/*.zip
