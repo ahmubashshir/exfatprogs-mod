@@ -1,0 +1,67 @@
+name: autotag
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        submodules: true
+        fetch-tags: true
+
+    - name: tag
+      id: tag
+      run: |
+        make module.prop
+        VERSION=$(sed -n 's/^version=//p' module.prop)
+
+        if ! git rev-parse -q --verify "refs/tags/$VERSION" > /dev/null; then
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$VERSION" -m "Release $VERSION"
+          echo "tag=$VERSION" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: push
+      if: ${{ ! env.ACT && steps.tag.outputs.tag != '' }}
+      run: |
+        git push --tags origin
+
+    - name: wait
+      if: ${{ ! env.ACT && steps.tag.outputs.tag != '' }}
+      run: |
+        TAG="${{ steps.tag.outputs.tag }}"
+        echo "Waiting for tag $TAG..."
+
+        for i in $(seq 1 30); do
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "refs/tags/$TAG$"; then
+            exit 0
+          fi
+          sleep 2
+        done
+
+        echo "Timed out waiting for tag $TAG"
+        exit 1
+
+  publish:
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    needs: tag
+    uses: ./.github/workflows/release.yaml
+    if: ${{ needs.tag.outputs.tag != '' }}
+    with:
+      tag: ${{ needs.tag.outputs.tag }}
+
+# vim: ts=2:et
