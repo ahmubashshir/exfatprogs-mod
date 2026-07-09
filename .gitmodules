@@ -1,0 +1,3 @@
+[submodule "jni/exfatprogs"]
+	path = jni/exfatprogs
+	url = https://github.com/exfatprogs/exfatprogs
