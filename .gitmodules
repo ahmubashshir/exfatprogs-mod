@@ -1,3 +1,7 @@
 [submodule "jni/exfatprogs"]
 	path = jni/exfatprogs
 	url = https://github.com/exfatprogs/exfatprogs
+[submodule "jni/e2fsprogs"]
+	path = jni/blkid_e2fsprogs
+	url = https://android.googlesource.com/platform/external/e2fsprogs
+	branch = main-kernel
