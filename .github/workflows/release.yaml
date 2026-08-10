@@ -22,6 +22,9 @@ jobs:
         submodules: true
         ref: refs/tags/${{ inputs.tag }}
 
+    - name: fetch notes
+      run: git fetch -f --tags origin 'refs/notes/*:refs/notes/*'
+
     - uses: nttld/setup-ndk@v1
       with:
         ndk-version: r27
@@ -29,13 +32,17 @@ jobs:
     - name: build
       run: |
         REPO="${{ github.repository }}"
+        export RELEASEDL="https://github.com/$REPO/releases/download"
+        export PUBLICURL="https://${REPO%/*}.github.io/${REPO#*/}"
         make libs
 
         make module.prop
-        echo "updateJson=https://${REPO%/*}.github.io/${REPO#*/}/update.json" >> module.prop
+        echo "updateJson=$PUBLICURL/update.json" >> module.prop
 
         make exfatprogs.zip
-        REPO="https://github.com/$REPO" sh update.json.sh
+        sh update.json.sh
+
+        make publish
 
     - name: release
       uses: softprops/action-gh-release@v3

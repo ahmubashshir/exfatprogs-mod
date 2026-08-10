@@ -12,6 +12,7 @@ cat > public/update.json << EOF
 {
   "version": "$VERSION",
   "versionCode": $VERSION_CODE,
-  "zipUrl": "$REPO/releases/download/$VERSION/exfatprogs.zip"
+  "zipUrl":    "$RELEASEDL/$VERSION/exfatprogs.zip",
+  "changelog": "$PUBLICURL/changelog.md"
 }
 EOF

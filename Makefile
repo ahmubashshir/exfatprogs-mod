@@ -16,9 +16,9 @@ clean:
 	@echo "CLEAN  ndk"
 	@ndk-build clean
 	@rm -f libs/.built
-	@echo "CLEAN  "$(FILES) exfatprogs.zip $(DIRS) obj
+	@echo "CLEAN  "$(FILES) exfatprogs.zip $(DIRS) obj public
 	@rm -f $(FILES) exfatprogs.zip
-	@rm -rf $(DIRS) obj
+	@rm -rf $(DIRS) obj public
 
 libs: libs/.built
 libs/.built: jni/*.mk
@@ -26,4 +26,13 @@ libs/.built: jni/*.mk
 	@ndk-build
 	@touch libs/.built
 
-.PHONY: all clean libs
+public/%: %.sh
+	@mkdir -p public
+	@echo "GEN    $@"
+	@sh $< > $@
+
+public/changelog.md:  module.prop
+public/update.json:  module.prop
+
+publish: public/changelog.md public/update.json
+.PHONY: all clean libs publish
