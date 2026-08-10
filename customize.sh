@@ -18,5 +18,11 @@ ui_print 'Fixing Selinux Labels'
 chcon u:object_r:fsck_exec:s0 "$MODPATH/system/bin/fsck.exfat"
 chcon u:object_r:mkfs_exec:s0 "$MODPATH/system/bin/mkfs.exfat"
 
+ui_print 'Fixing groups'
+chgrp shell "$MODPATH/system/bin/fsck.exfat"
+chgrp shell "$MODPATH/system/bin/mkfs.exfat"
+chgrp shell "$MODPATH/system/bin/tune.exfat"
+chgrp shell "$MODPATH/system/bin/exfatlabel"
+
 ui_print 'Cleaning up residues'
 rm -f "${MODPATH}/customize.sh"
