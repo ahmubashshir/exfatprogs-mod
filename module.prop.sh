@@ -1,5 +1,5 @@
 #!/bin/sh
-REBUILD=2
+REBUILD=3
 
 VERSION=$(
 	sed -nE '/EXFAT_PROGS_VERSION/s/^.+ "([[:alnum:].-]+)".*$/\1/p' jni/exfatprogs/include/version.h
