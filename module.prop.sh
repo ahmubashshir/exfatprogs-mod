@@ -1,5 +1,5 @@
 #!/bin/sh
-REBUILD=0
+REBUILD=1
 
 VERSION=$(
 	sed -nE '/EXFAT_PROGS_VERSION/s/^.+ "([[:alnum:].-]+)".*$/\1/p' jni/exfatprogs/include/version.h
@@ -18,10 +18,14 @@ VERSION_CODE=$(
 		xargs expr
 )
 
+if test "$REBUILD" -eq 0; then
+	unset REBUILD
+fi
+
 cat << EOF
 id=exfatprogs
 name=exfatprogs
-version=$VERSION-b$RELEASE
+version=$VERSION-b$RELEASE${REBUILD:+.$REBUILD}
 versionCode=$VERSION_CODE
 author=Mubashshir
 description=exfatprogs Update package for android
